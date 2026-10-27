@@ -4,20 +4,24 @@ import time
 from concurrent.futures import ThreadPoolExecutor
 
 
-def check_port(host, port, timeout=0.5):
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.settimeout(timeout)
-    try:
-        if s.connect_ex((host, port)) == 0:
-            return port, True, grab_banner(s)
-        return port, False, ""
-    finally:
-        s.close()
+def check_port(host, port, timeout=1.0, retries=2):
+    for attempt in range(retries):
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s.settimeout(timeout)
+        try:
+            result = s.connect_ex((host, port))
+            if result == 0:
+                return port, True, grab_banner(s)
+            if result == 111:  # connection refused: definitely closed, no retry needed
+                return port, False, ""
+        finally:
+            s.close()
+    return port, False, ""
 
 
 def grab_banner(s):
     try:
-        s.settimeout(1)
+        s.settimeout(3)
         data = s.recv(1024)
         return data.decode(errors="ignore").strip()
     except (socket.timeout, OSError):
