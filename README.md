@@ -24,6 +24,7 @@ Scanning ports 1-200 on `scanme.nmap.org`:
 | 100 | 1.46 s |
 
 That is about **58x faster**, with the same open ports found.
+![Scan comparison](demo.png)
 
 ## Installation
 
