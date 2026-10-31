@@ -28,7 +28,7 @@ That is about **58x faster**, with the same open ports found.
 
 ## Installation
 
-git clone https://github.com/muskaaaann36/python-port-scanner.git
+git clone https://github.com/muskaaann36/python-port-scanner 
 cd python-port-scanner
 python3 -m venv venv
 source venv/bin/activate
